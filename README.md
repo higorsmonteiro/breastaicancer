@@ -18,13 +18,107 @@ __Fig. X XXXX.__
 
 
 
-# Organization
-We have organized this repo into three main folders:
-- `code` - Code to perform all the tasks of the project. Codes to bundle all classes to perform a specific tasks.
-    - `src` - Main classes to bundle functions regarding a specific task (e. g. performing the matching procedure).
-    - `lib` - auxiliary functions used in the main classes.  
-- `data` - Contains the final dataset (after linkage) with all deidentified information used to create the cohort and perform the survival analysis.
-- `figures` - All figures from the main document for publication. 
+## Overview
+
+This repository implements an end-to-end data and modeling pipeline for breast cancer risk prediction using text-based and structured healthcare data provided by the health insurer/provider Hapvida in Brazil.
+
+The modeling objective is:
+
+> Estimate the probability of developing breast cancer within a defined prediction horizon, conditional on information available at the time of a benign mammogram exam.
+
+The intended users of this software are data scientists developing, validating, and maintaining breast cancer risk models for prospective patient monitoring and screening optimization.
+
+The pipeline performs the following stages:
+
+1. **Data extraction**:
+   - Oracle SQL queries over databases.
+   - Schema validation of extracted tables.
+
+2. **Preprocessing**:
+   - Preprocessing of raw data.
+   - Merging of preprocessed sources.
+
+3. **Cohort construction**:
+   - Extra processing.
+   - Index date definition.
+   - Inclusion and eligibility criteria.
+   - Survival calculations.
+
+4. **Precomputation**:
+   - Aggregation of past mammogram reports.
+   - Temporal feature construction.
+
+5. **Cohort splitting**
+
+6. **Model development**:
+   - Hyperparameter tuning.
+   - Training the best parameter configuration.
+
+7. **Evaluation**:
+   - Held-out test metrics (AUROC and AUPRC).
+   - Explainability calculations (integrated gradients and feature ablation).
+
+---
+
+## Quickstart
+
+All execution steps should be performed through the CLI interface (`hapcancer.cli`) to ensure consistent configuration and logging. Scripts for direct interaction with the CLI interface were created for defining and automating major pipeline tasks.
+
+All commands below must be executed from the repository root.
+
+### 1. Create and Activate Environment
+
+    conda env create -f environment.yml
+    conda activate hapcancer
+
+### 2. Install Package in Editable Mode (not optional for running the scripts)
+
+    pip install -e .
+
+This mode allows the user to call the package directly from the CLI, using commands such as `hapcancer command [args]`.
+
+**Examples of how to run CLI tasks**
+
+Option 1 (if editable mode is not enabled):
+
+    python -m hapcancer.cli command-name [args]
+
+Option 2 (editable mode enabled):
+
+    hapcancer command-name [args]
+
+Option 1 is not recommended for automation. Further details on running the scripts are provided in the `docs` folder.
+
+---
+
+## Repository Structure
+
+    hapcancer/
+      etl/           # Querying, preprocessing, merging, and cohort definitions
+      schemas/       # Data contracts and validation
+      model/         # Architecture, training, losses
+      eval/          # Metrics and evaluation
+      cli/           # Command-line entrypoints for running pipeline stages
+
+---
+
+## Reproducibility
+
+Every major experiment (defined by running all pipeline stages) should be reproducible and traceable to a configuration folder. This software can only be executed through the correct setup of a configuration folder. More details on how to set up a configuration folder are provided in `docs/configuration_setup.md`. Here, we give a short overview.
+
+A configuration folder follows a specific schema and contains several `.yml` configuration files on which each task depends. Every minor and major component of the pipeline uses information stored in these configuration files.
+
+Examples include:
+
+1. File system paths to store extracted raw data.
+2. Main parameters for the BI-RADS classifier to be trained.
+3. Age intervals for which a patient (at the time of an exam) is considered eligible.
+4. BI-RADS values to include in the initial cohort definition.
+5. ...
+
+Refer to `docs/configuration_setup.md` for more details.
+
+---
 
 
 # Correspondence
