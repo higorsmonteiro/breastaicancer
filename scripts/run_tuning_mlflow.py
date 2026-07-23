@@ -8,7 +8,6 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--config-dir", required=True)
 args = parser.parse_args()
  
-# -- default: 'D:/hapvida/config/run_test_24022026'
 config_dir = args.config_dir
 
 # ----------------------------------------------
