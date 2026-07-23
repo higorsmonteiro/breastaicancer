@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hapcancer"
+version = "0.1.0"
+requires-python = ">=3.11"
+readme = "README.md"
+authors = [
+  {name="Higor S. Monteiro", email="higor.monteiro@fisica.ufc.br"}
+]
+dependencies = [
+  "oracledb==3.4.2",
+  "pyyaml==6.0.3",
+  "typer==0.24.1",
+  "python-dotenv==1.2.1"
+]
+
+[project.scripts]
+hapcancer = "hapcancer.cli.cli:app"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["hapcancer*"]
